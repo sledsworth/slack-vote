@@ -1,0 +1,17 @@
+{
+  "name": "slack-vote",
+  "version": "1.0.0",
+  "description": "Simple Slack Voting App",
+  "main": "index.js",
+  "repository": "https://sledsworth@github.com/sledsworth/slack-vote.git",
+  "author": "Steve Ledsworth <sledsworth@gmail.com>",
+  "license": "MIT",
+  "private": false,
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "dotenv": "^6.2.0",
+    "express": "^4.16.4",
+    "lodash": "^4.17.11",
+    "request": "^2.88.0"
+  }
+}
