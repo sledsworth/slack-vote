@@ -8,10 +8,9 @@ var app = express();
 var urlencodedParser = bodyParser.urlencoded({
   extended: false
 })
-const PORT = 3001;
 
 // Lets start our server
-app.listen(PORT, function () {
+app.listen(process.env.PORT || 3001, function () {
   //Callback triggered when server is successfully listening. Hurray!
   console.log("Slack Vote Started on:" + PORT);
 });
