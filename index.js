@@ -170,6 +170,7 @@ function updateTextWithVote(text, vote, user) {
 
 
   options[vote] = updatedOption
+  console.log(updatedOption, options)
   let newText = options.join('\n\n')
   console.log(newText)
   return newText
