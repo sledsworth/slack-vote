@@ -152,7 +152,6 @@ function splitBuiltText(text) {
 function updateTextWithVote(text, vote, user) {
   let options = splitBuiltText(text)
   let optionToUpdate = options[vote]
-  console.log(optionToUpdate)
   let hasUsers = optionToUpdate.lastIndexOf('\n') > 0
   let optionText = hasUsers ? optionToUpdate.slice(0, optionToUpdate.lastIndexOf('\n')) : optionToUpdate
   let userText = hasUsers ? optionToUpdate.slice(optionToUpdate.lastIndexOf('\n')) : ''
@@ -164,15 +163,14 @@ function updateTextWithVote(text, vote, user) {
   } else {
     usersWhoVotedForOption.push(formattedUsername)
   }
+  console.log(optionToUpdate, hasUsers, optionText, userText)
   let updatedOption = usersWhoVotedForOption.length > 0 ?
     `${optionText}\n${buildPublicUserVotes(usersWhoVotedForOption)}` :
     optionText
 
 
   options[vote] = updatedOption
-  console.log(updatedOption, options)
   let newText = options.join('\n\n')
-  console.log(newText)
   return newText
 }
 
