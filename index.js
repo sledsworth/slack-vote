@@ -186,7 +186,7 @@ function updateTextWithVote(text, vote, user) {
 }
 
 function buildPublicUserVotes(users) {
-	return `  \`${users.length}\`     ${users.map((user, index) => `${users}${index === user.length - 1 ? ', ' : ''}`)}`
+	return `  \`${users.length}\`     ${users.map((user, index) => `${user}${index === user.length - 1 ? ', ' : ''}`)}`
 }
 
 function stringifyUserId(id) {
