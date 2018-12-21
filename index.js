@@ -173,6 +173,7 @@ function updateTextWithVote(text, vote, user) {
 	} else {
 		usersWhoVotedForOption.push(formattedUsername)
 	}
+	console.log(usersWhoVotedForOption)
 	// console.log(optionToUpdate, hasUsers, optionText, userText, formattedUsername, usersWhoVotedForOption)
 	let updatedOption =
 		usersWhoVotedForOption.length > 0
