@@ -165,7 +165,6 @@ function updateTextWithVote(text, vote, user) {
 	let optionText = hasUsers ? optionToUpdate.slice(0, optionToUpdate.lastIndexOf('\n')) : optionToUpdate
 	let userText = hasUsers ? optionToUpdate.slice(optionToUpdate.lastIndexOf('\n')) : ''
 	let usersWhoVotedForOption = userText.match(/(<@(\w|\d)+>)/g) || []
-	console.log(usersWhoVotedForOption)
 	let formattedUsername = stringifyUserId(user)
 	let userIndex = usersWhoVotedForOption.indexOf(formattedUsername)
 	if (userIndex >= 0) {
@@ -173,8 +172,7 @@ function updateTextWithVote(text, vote, user) {
 	} else {
 		usersWhoVotedForOption.push(formattedUsername)
 	}
-	console.log(usersWhoVotedForOption)
-	// console.log(optionToUpdate, hasUsers, optionText, userText, formattedUsername, usersWhoVotedForOption)
+
 	let updatedOption =
 		usersWhoVotedForOption.length > 0
 			? `${optionText}\n${buildPublicUserVotes(usersWhoVotedForOption)}`
@@ -186,7 +184,7 @@ function updateTextWithVote(text, vote, user) {
 }
 
 function buildPublicUserVotes(users) {
-	return `  \`${users.length}\`     ${users.map((user, index) => `${user}${index === user.length - 1 ? ', ' : ''}`)}`
+	return `  \`${users.length}\`     ${users.map((user, index) => `${user}${index === user.length - 1 ? ',  ' : ''}`)}`
 }
 
 function stringifyUserId(id) {
