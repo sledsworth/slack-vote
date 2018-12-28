@@ -44,7 +44,7 @@ app.post('/commands/vote', urlencodedParser, (req, res) => {
 	res.status(200).end()
 	var reqBody = req.body
 	var responseURL = reqBody.response_url
-
+	console.log(reqBody);
 	let {
 		text,
 		actions,
@@ -54,13 +54,22 @@ app.post('/commands/vote', urlencodedParser, (req, res) => {
 		response_type: 'in_channel',
 		text: `*${question}*`,
 		attachments: [{
-			text: text,
-			fallback: "Shame... buttons aren't supported in this land",
-			callback_id: 'slack-vote',
-			color: '#084477',
-			attachment_type: 'default',
-			actions: actions,
-		}, ],
+				text: text,
+				fallback: "Shame... buttons aren't supported in this land",
+				callback_id: 'slack-vote',
+				color: '#084477',
+				attachment_type: 'default',
+				actions: actions,
+			},
+			{
+				text: `_This vote was created by: ${stringifyUserId(reqBody.user_id)}_`,
+				fallback: "Shame... buttons aren't supported in this land",
+				callback_id: 'slack-vote',
+				color: '#333333',
+				attachment_type: 'default',
+				actions: actions,
+			}
+		],
 	}
 	sendMessageToSlackResponseURL(responseURL, message)
 })
@@ -78,13 +87,17 @@ app.post('/actions', urlencodedParser, function (req, res) {
 		text: actionJSONPayload.original_message.text,
 		replace_original: true,
 		attachments: [{
-			text: text,
-			fallback: "Shame... buttons aren't supported in this land",
-			callback_id: 'slack-vote',
-			color: '#084477',
-			attachment_type: 'default',
-			actions: actionJSONPayload.original_message.attachments[0].actions,
-		}, ],
+				text: text,
+				fallback: "Shame... buttons aren't supported in this land",
+				callback_id: 'slack-vote',
+				color: '#084477',
+				attachment_type: 'default',
+				actions: actionJSONPayload.original_message.attachments[0].actions,
+			},
+			{
+				...actionJSONPayload.actions[1]
+			}
+		],
 	}
 	sendMessageToSlackResponseURL(actionJSONPayload.response_url, message)
 })
