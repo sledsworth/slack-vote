@@ -50,6 +50,40 @@ app.post('/commands/vote', urlencodedParser, (req, res) => {
 		actions,
 		question
 	} = parseSlashCommand(reqBody.text)
+	let groupedActions = _.chunk(actions, 5).concat([{
+			name: 'vote-actions',
+			text: 'Close Voting',
+			type: 'button',
+			style: 'primary',
+			value: 'close',
+			"confirm": {
+				"title": "Are you sure?",
+				"text": "Closing the vote will disable voting.",
+				"ok_text": "Yes",
+				"dismiss_text": "No"
+			}
+		},
+		{
+			name: 'vote-actions',
+			text: 'Delete Vote',
+			type: 'button',
+			style: 'danger',
+			value: 'delete',
+			"confirm": {
+				"title": "Are you sure?",
+				"text": "Vote will be deleted.",
+				"ok_text": "Yes",
+				"dismiss_text": "No"
+			}
+		}
+	])
+	let actionAttachments = groupedActions.map(actionGroup => ({
+		actions: actionGroup,
+		fallback: "Shame... buttons aren't supported in this land",
+		callback_id: 'slack-vote',
+		color: '#084477',
+		attachment_type: 'default',
+	}))
 	var message = {
 		response_type: 'in_channel',
 		text: `*${question}*`,
@@ -59,34 +93,8 @@ app.post('/commands/vote', urlencodedParser, (req, res) => {
 				callback_id: 'slack-vote',
 				color: '#084477',
 				attachment_type: 'default',
-				actions: [...actions, {
-						name: 'vote-actions',
-						text: 'Close Voting',
-						type: 'button',
-						style: 'primary',
-						value: 'close',
-						"confirm": {
-							"title": "Are you sure?",
-							"text": "Closing the vote will disable voting.",
-							"ok_text": "Yes",
-							"dismiss_text": "No"
-						}
-					},
-					{
-						name: 'vote-actions',
-						text: 'Delete Vote',
-						type: 'button',
-						style: 'danger',
-						value: 'delete',
-						"confirm": {
-							"title": "Are you sure?",
-							"text": "Vote will be deleted.",
-							"ok_text": "Yes",
-							"dismiss_text": "No"
-						}
-					}
-				]
 			},
+			...actionAttachments,
 			{
 				text: `_This vote was created by: ${stringifyUserId(reqBody.user_id)}_`,
 				fallback: "Shame... buttons aren't supported in this land",
@@ -107,22 +115,20 @@ app.post('/actions', urlencodedParser, function (req, res) {
 		actionJSONPayload.actions[0].value,
 		actionJSONPayload.user.id
 	)
+	let attachments = [...actionJSONPayload.original_message.attachments]
+	attachments[0] = {
+		text: text,
+		fallback: "Shame... buttons aren't supported in this land",
+		callback_id: 'slack-vote',
+		color: '#084477',
+		attachment_type: 'default',
+		actions: actionJSONPayload.original_message.attachments[0].actions,
+	}
 	var message = {
 		response_type: 'in_channel',
 		text: actionJSONPayload.original_message.text,
 		replace_original: true,
-		attachments: [{
-				text: text,
-				fallback: "Shame... buttons aren't supported in this land",
-				callback_id: 'slack-vote',
-				color: '#084477',
-				attachment_type: 'default',
-				actions: actionJSONPayload.original_message.attachments[0].actions,
-			},
-			{
-				...actionJSONPayload.original_message.attachments[1]
-			}
-		],
+		attachments,
 	}
 	sendMessageToSlackResponseURL(actionJSONPayload.response_url, message)
 })
@@ -186,7 +192,7 @@ function numberToEmoji(number) {
 		7: ':seven:',
 		8: ':eight:',
 		9: ':nine:',
-		10: ':ten:',
+		10: ':keycap_ten:',
 	} [number] || ':x:')
 }
 
