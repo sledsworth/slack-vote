@@ -44,8 +44,8 @@ app.get('/auth/redirect', (req, res) => {
 app.post('/commands/vote', urlencodedParser, (req, res) => {
 	res.status(200).end()
 	var reqBody = req.body
+	console.log(reqBody)
 	var responseURL = reqBody.response_url
-	console.log(reqBody);
 	let {
 		text,
 		actions,
@@ -123,6 +123,8 @@ app.post('/commands/vote', urlencodedParser, (req, res) => {
 app.post('/actions', urlencodedParser, function (req, res) {
 	res.status(200).end()
 	var actionJSONPayload = JSON.parse(req.body.payload)
+	console.log(actionJSONPayload)
+
 	let text = updateTextWithVote(
 		actionJSONPayload.original_message.attachments[0].text,
 		actionJSONPayload.actions[0].value,
