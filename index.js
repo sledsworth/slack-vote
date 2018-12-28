@@ -67,7 +67,6 @@ app.post('/commands/vote', urlencodedParser, (req, res) => {
 				callback_id: 'slack-vote',
 				color: '#333333',
 				attachment_type: 'default',
-				actions: actions,
 			}
 		],
 	}
@@ -95,7 +94,7 @@ app.post('/actions', urlencodedParser, function (req, res) {
 				actions: actionJSONPayload.original_message.attachments[0].actions,
 			},
 			{
-				...actionJSONPayload.actions[1]
+				...actionJSONPayload.original_message.attachments[1]
 			}
 		],
 	}
