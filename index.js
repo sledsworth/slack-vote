@@ -64,7 +64,7 @@ app.post('/commands/vote', urlencodedParser, (req, res) => {
 						text: 'Close Voting',
 						type: 'button',
 						style: 'primary',
-						value: index,
+						value: 'close',
 						"confirm": {
 							"title": "Are you sure?",
 							"text": "Closing the vote will disable voting.",
@@ -77,7 +77,7 @@ app.post('/commands/vote', urlencodedParser, (req, res) => {
 						text: 'Delete Vote',
 						type: 'button',
 						style: 'danger',
-						value: index,
+						value: 'delete',
 						"confirm": {
 							"title": "Are you sure?",
 							"text": "Vote will be deleted.",
