@@ -10,7 +10,7 @@ var urlencodedParser = bodyParser.urlencoded({
 })
 
 // Lets start our server
-app.listen(process.env.PORT || 3001, function() {
+app.listen(process.env.PORT || 3001, function () {
 	//Callback triggered when server is successfully listening. Hurray!
 	console.log('Slack Vote Started on:' + process.env.PORT)
 })
@@ -45,25 +45,27 @@ app.post('/commands/vote', urlencodedParser, (req, res) => {
 	var reqBody = req.body
 	var responseURL = reqBody.response_url
 
-	let { text, actions, question } = parseSlashCommand(reqBody.text)
+	let {
+		text,
+		actions,
+		question
+	} = parseSlashCommand(reqBody.text)
 	var message = {
 		response_type: 'in_channel',
 		text: `*${question}*`,
-		attachments: [
-			{
-				text: text,
-				fallback: "Shame... buttons aren't supported in this land",
-				callback_id: 'slack-vote',
-				color: '#084477',
-				attachment_type: 'default',
-				actions: actions,
-			},
-		],
+		attachments: [{
+			text: text,
+			fallback: "Shame... buttons aren't supported in this land",
+			callback_id: 'slack-vote',
+			color: '#084477',
+			attachment_type: 'default',
+			actions: actions,
+		}, ],
 	}
 	sendMessageToSlackResponseURL(responseURL, message)
 })
 
-app.post('/actions', urlencodedParser, function(req, res) {
+app.post('/actions', urlencodedParser, function (req, res) {
 	res.status(200).end()
 	var actionJSONPayload = JSON.parse(req.body.payload)
 	let text = updateTextWithVote(
@@ -75,16 +77,14 @@ app.post('/actions', urlencodedParser, function(req, res) {
 		response_type: 'in_channel',
 		text: actionJSONPayload.original_message.text,
 		replace_original: true,
-		attachments: [
-			{
-				text: text,
-				fallback: "Shame... buttons aren't supported in this land",
-				callback_id: 'slack-vote',
-				color: '#084477',
-				attachment_type: 'default',
-				actions: actionJSONPayload.original_message.attachments[0].actions,
-			},
-		],
+		attachments: [{
+			text: text,
+			fallback: "Shame... buttons aren't supported in this land",
+			callback_id: 'slack-vote',
+			color: '#084477',
+			attachment_type: 'default',
+			actions: actionJSONPayload.original_message.attachments[0].actions,
+		}, ],
 	}
 	sendMessageToSlackResponseURL(actionJSONPayload.response_url, message)
 })
@@ -138,20 +138,18 @@ function parseSlashCommand(text) {
 }
 
 function numberToEmoji(number) {
-	return (
-		{
-			1: ':one:',
-			2: ':two:',
-			3: ':three:',
-			4: ':four:',
-			5: ':five:',
-			6: ':six:',
-			7: ':seven:',
-			8: ':eight:',
-			9: ':nine:',
-			10: ':ten:',
-		}[number] || ':x:'
-	)
+	return ({
+		1: ':one:',
+		2: ':two:',
+		3: ':three:',
+		4: ':four:',
+		5: ':five:',
+		6: ':six:',
+		7: ':seven:',
+		8: ':eight:',
+		9: ':nine:',
+		10: ':ten:',
+	} [number] || ':x:')
 }
 
 function splitBuiltText(text) {
@@ -162,7 +160,7 @@ function updateTextWithVote(text, vote, user) {
 	let options = splitBuiltText(text)
 	let optionToUpdate = options[vote]
 	let hasUsers = optionToUpdate.lastIndexOf('\n') > 0
-	let optionText = hasUsers ? optionToUpdate.slice(0, optionToUpdate.lastIndexOf('\n')) : optionToUpdate
+	let optionText = hasUsers ? optionToUpdate.slice(0, optionToUpdate.indexOf('\`')) : optionToUpdate
 	let userText = hasUsers ? optionToUpdate.slice(optionToUpdate.lastIndexOf('\n')) : ''
 	let usersWhoVotedForOption = userText.match(/(<@(\w|\d)+>)/g) || []
 	let formattedUsername = stringifyUserId(user)
@@ -174,9 +172,9 @@ function updateTextWithVote(text, vote, user) {
 	}
 
 	let updatedOption =
-		usersWhoVotedForOption.length > 0
-			? `${optionText}\t${usersWhoVotedForOption.length}\n${buildPublicUserVotes(usersWhoVotedForOption)}`
-			: optionText
+		usersWhoVotedForOption.length > 0 ?
+		`${optionText}\t\`${usersWhoVotedForOption.length}\`\n${buildPublicUserVotes(usersWhoVotedForOption)}` :
+		optionText
 
 	options[vote] = updatedOption
 	let newText = options.join('\n\n')
