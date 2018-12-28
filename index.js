@@ -66,6 +66,18 @@ app.post('/commands/vote', urlencodedParser, (req, res) => {
 		},
 		{
 			name: 'vote-actions',
+			text: 'Make Anonymous',
+			type: 'button',
+			value: 'anonymous',
+			"confirm": {
+				"title": "Are you sure?",
+				"text": "You cannot make the vote public again.",
+				"ok_text": "Yes",
+				"dismiss_text": "No"
+			}
+		},
+		{
+			name: 'vote-actions',
 			text: 'Delete Vote',
 			type: 'button',
 			style: 'danger',
