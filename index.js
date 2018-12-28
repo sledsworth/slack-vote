@@ -160,7 +160,7 @@ function updateTextWithVote(text, vote, user) {
 	let options = splitBuiltText(text)
 	let optionToUpdate = options[vote]
 	let hasUsers = optionToUpdate.lastIndexOf('\n') > 0
-	let optionText = hasUsers ? optionToUpdate.slice(0, optionToUpdate.indexOf('\`')) : optionToUpdate
+	let optionText = hasUsers ? optionToUpdate.slice(0, optionToUpdate.indexOf('\t')) : optionToUpdate
 	let userText = hasUsers ? optionToUpdate.slice(optionToUpdate.lastIndexOf('\n')) : ''
 	let usersWhoVotedForOption = userText.match(/(<@(\w|\d)+>)/g) || []
 	let formattedUsername = stringifyUserId(user)
