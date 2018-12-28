@@ -51,7 +51,7 @@ app.post('/commands/vote', urlencodedParser, (req, res) => {
 		actions,
 		question
 	} = parseSlashCommand(reqBody.text)
-	let groupedActions = _.chunk(actions, 5).concat([{
+	let groupedActions = [..._.chunk(actions, 5), [{
 			name: 'vote-actions',
 			text: 'Close Voting',
 			type: 'button',
@@ -77,7 +77,7 @@ app.post('/commands/vote', urlencodedParser, (req, res) => {
 				"dismiss_text": "No"
 			}
 		}
-	])
+	]]
 	let actionAttachments = groupedActions.map(actionGroup => ({
 		actions: actionGroup,
 		fallback: "Shame... buttons aren't supported in this land",
