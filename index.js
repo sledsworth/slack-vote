@@ -175,7 +175,7 @@ function updateTextWithVote(text, vote, user) {
 
 	let updatedOption =
 		usersWhoVotedForOption.length > 0
-			? `${optionText}\n${buildPublicUserVotes(usersWhoVotedForOption)}`
+			? `${optionText}\t${usersWhoVotedForOption.length}\n${buildPublicUserVotes(usersWhoVotedForOption)}`
 			: optionText
 
 	options[vote] = updatedOption
@@ -184,7 +184,7 @@ function updateTextWithVote(text, vote, user) {
 }
 
 function buildPublicUserVotes(users) {
-	return `  \`${users.length}\`     ${users.map((user, index) => `${user}${index === user.length - 1 ? ',  ' : ''}`)}`
+	return `\t${users.map((user, index) => `${user}${index === user.length - 1 ? ',  ' : ''}`)}`
 }
 
 function stringifyUserId(id) {
