@@ -59,7 +59,33 @@ app.post('/commands/vote', urlencodedParser, (req, res) => {
 				callback_id: 'slack-vote',
 				color: '#084477',
 				attachment_type: 'default',
-				actions: actions,
+				actions: [...actions, {
+						name: 'vote-actions',
+						text: 'Close Voting',
+						type: 'button',
+						style: 'primary',
+						value: index,
+						"confirm": {
+							"title": "Are you sure?",
+							"text": "Closing the vote will disable voting.",
+							"ok_text": "Yes",
+							"dismiss_text": "No"
+						}
+					},
+					{
+						name: 'vote-actions',
+						text: 'Delete Vote',
+						type: 'button',
+						style: 'danger',
+						value: index,
+						"confirm": {
+							"title": "Are you sure?",
+							"text": "Vote will be deleted.",
+							"ok_text": "Yes",
+							"dismiss_text": "No"
+						}
+					}
+				]
 			},
 			{
 				text: `_This vote was created by: ${stringifyUserId(reqBody.user_id)}_`,
