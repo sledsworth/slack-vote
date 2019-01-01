@@ -129,7 +129,10 @@ app.post("/commands/vote", urlencodedParser, (req, res) => {
 app.post("/actions", urlencodedParser, function(req, res) {
   res.status(200).end();
   var actionJSONPayload = JSON.parse(req.body.payload);
-  console.log(actionJSONPayload, actionJSONPayload.attachments[0]);
+  console.log(
+    actionJSONPayload,
+    actionJSONPayload.original_message.attachments[0]
+  );
 
   let text = updateTextWithVote(
     actionJSONPayload.original_message.attachments[0].text,
