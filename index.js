@@ -110,7 +110,8 @@ app.post("/commands/vote", urlencodedParser, (req, res) => {
         fallback: "Shame... buttons aren't supported in this land",
         callback_id: "slack-vote",
         color: "#084477",
-        attachment_type: "default"
+        attachment_type: "default",
+        state: JSON.stringify({ creator: reqBody.user_id })
       },
       ...actionAttachments,
       {
@@ -128,7 +129,7 @@ app.post("/commands/vote", urlencodedParser, (req, res) => {
 app.post("/actions", urlencodedParser, function(req, res) {
   res.status(200).end();
   var actionJSONPayload = JSON.parse(req.body.payload);
-  console.log(actionJSONPayload);
+  console.log(actionJSONPayload, actionJSONPayload.attachments[0]);
 
   let text = updateTextWithVote(
     actionJSONPayload.original_message.attachments[0].text,
